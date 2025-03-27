@@ -21,7 +21,7 @@ def save_data(df):
 st.subheader('📦 Inventory Management')
 
 if st.button("🔍 Go to Search and Filters"):
-    st.switch_page("app")
+    st.switch_page("app.py")
 
 # Agregar un nuevo material
 st.subheader('➕ Add New Material')
