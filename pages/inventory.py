@@ -1,16 +1,22 @@
 import pandas as pd
 import streamlit as st
 
-# Función para cargar los datos desde el archivo Excel
 def load_data():
-    df = pd.read_excel("Lab_Material.xlsx", engine="openpyxl")
-    return df
+    try:
+        df = pd.read_excel("Lab_Material.xlsx", engine="openpyxl")
+        return df
+    except Exception as e:
+        st.error(f"Error al cargar el archivo: {e}")
+        return None
+
+df = load_data()
+if df is not None:
+    st.dataframe(df)
+else:
+    st.warning("No se pudo cargar el archivo.")
 
 def save_data(df):
     df.to_excel("Lab_Material.xlsx", index=False, engine="openpyxl")
-
-# Mostrar los datos
-st.dataframe(df)
 
 st.subheader('📦 Inventory Management')
 
