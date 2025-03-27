@@ -12,6 +12,9 @@ df = load_data()
 # Título de la app
 st.title("🔬404 Material - VIBES🛰️")
 
+if st.button("🔧 Go to Inventory Management"):
+    st.switch_page("pages/inventory")
+
 # Barra de búsqueda
 search_term = st.text_input("🔍Search material or keyword:", "")
 
