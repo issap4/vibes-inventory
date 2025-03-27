@@ -6,15 +6,19 @@ def load_data():
     df = pd.read_excel("Lab_Material.xlsx", engine="openpyxl")
     return df
 
-# Cargar los datos
-st.title('🔬404 Material Management - VIBES🛰️')
-df = load_data()
+def save_data(df):
+    df.to_excel("Lab_Material.xlsx", index=False, engine="openpyxl")
 
 # Mostrar los datos
 st.dataframe(df)
 
+st.subheader('📦 Inventory Management')
+
+if st.button("🔍 Go to Search and Filters"):
+    st.switch_page("app")
+
 # Agregar un nuevo material
-st.subheader('Add New Material')
+st.subheader('➕ Add New Material')
 with st.form(key='add_form'):
     material = st.text_input('Material')
     description = st.text_input('Description')
@@ -44,7 +48,7 @@ with st.form(key='add_form'):
         st.success('Material successfully added!')
 
 # Modificar un material existente
-st.subheader('Modify Material in Stock')
+st.subheader('✏️ Modify Material in Stock')
 material_to_modify = st.selectbox('Select the material to modify: ', df['Material'].unique())
 selected_material = df[df['Material'] == material_to_modify].iloc[0]
 
@@ -61,29 +65,19 @@ with st.form(key='modify_form'):
     submit_button = st.form_submit_button(label='Modify Material')
 
     if submit_button:
-        # Actualizar los valores en el DataFrame
-        df.loc[df['Material'] == material_to_modify, 'Description'] = new_description
-        df.loc[df['Material'] == material_to_modify, 'Container'] = new_container
-        df.loc[df['Material'] == material_to_modify, 'Location'] = new_location
-        df.loc[df['Material'] == material_to_modify, 'Shelf'] = new_shelf
-        df.loc[df['Material'] == material_to_modify, 'Amount'] = new_amount
-        df.loc[df['Material'] == material_to_modify, 'Keywords'] = new_keywords
-
-        # Guardar los cambios en el archivo Excel
-        df.to_excel("Lab_Material.xlsx", index=False, engine="openpyxl")
-        # Recargar los datos después de modificar el nuevo material
-        df = load_data()
+        df.loc[df['Material'] == material_to_modify, ['Description', 'Container', 'Location', 'Shelf', 'Amount', 'Keywords']] = [
+            new_description, new_container, new_location, new_shelf, new_amount, new_keywords
+        ]
+        save_data(df)
         st.success('Material successfully modified!')
 
 # Eliminar un material
-st.subheader('Delete Material in Stock')
-material_to_delete = st.selectbox('Select the material to delete', df['Material'].unique())
+st.subheader('🗑️ Delete Material')
+material_to_delete = st.selectbox('Select the material to delete:', df['Material'].unique())
 
 delete_button = st.button(label='Delete Material')
 
 if delete_button:
     df = df[df['Material'] != material_to_delete]
-    df.to_excel("Lab_Material.xlsx", index=False, engine="openpyxl")
-    # Recargar los datos después de eliminar el nuevo material
-    df = load_data()
+    save_data(df)
     st.success('Material successfully deleted!')
