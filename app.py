@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 
 # Cargar datos de Excel
-@st.cache_data
 def load_data():
     df = pd.read_excel("Lab_Material.xlsx", engine="openpyxl")
     return df
