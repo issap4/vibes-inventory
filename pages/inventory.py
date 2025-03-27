@@ -51,6 +51,7 @@ with st.form(key='add_form'):
         df.to_excel("Lab_Material.xlsx", index=False, engine="openpyxl")
         # Recargar los datos después de agregar el nuevo material
         df = load_data()
+        st.cache_data.clear()  # 🔄 Borra la caché para que los otros scripts recarguen los datos
         st.success('Material successfully added!')
 
 # Modificar un material existente
@@ -75,6 +76,7 @@ with st.form(key='modify_form'):
             new_description, new_container, new_location, new_shelf, new_amount, new_keywords
         ]
         save_data(df)
+        st.cache_data.clear()  # 🔄 Borra la caché para que los otros scripts recarguen los datos
         st.success('Material successfully modified!')
 
 # Eliminar un material
@@ -86,4 +88,5 @@ delete_button = st.button(label='Delete Material')
 if delete_button:
     df = df[df['Material'] != material_to_delete]
     save_data(df)
+    st.cache_data.clear()  # 🔄 Borra la caché para que los otros scripts recarguen los datos
     st.success('Material successfully deleted!')
